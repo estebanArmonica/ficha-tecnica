@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Simple_Blue" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fcad5a6b-fac9-43e5-8ff3-f207571e247f">
+	
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Oracle"/>
+
+	<parameter name="PACIENTE_ID" class="java.lang.Long">
+        <parameterDescription><![CDATA[ID del paciente]]></parameterDescription>
+    </parameter>
+	
+	<queryString language="SQL">
+		<![CDATA[SELECT p.rut_paciente, p.nom_paciente, p.fech_nacimiento, 
+					       CASE 
+					         WHEN EXTRACT(MONTH FROM SYSDATE) > EXTRACT(MONTH FROM p.fech_nacimiento) 
+					              OR (EXTRACT(MONTH FROM SYSDATE) = EXTRACT(MONTH FROM p.fech_nacimiento) 
+					                  AND EXTRACT(DAY FROM SYSDATE) >= EXTRACT(DAY FROM p.fech_nacimiento))
+					         THEN EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM p.fech_nacimiento)
+					         ELSE EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM p.fech_nacimiento) - 1
+					       END AS EDAD_PACIENTE, 
+					        p.nro_paciente,
+					       g.nom_genero, t.nom_tipo_sangre
+					FROM pacientes p INNER JOIN genero g
+					ON(g.id_genero = p.genero_id) INNER JOIN tipo_sangre t
+					ON(t.id_tipo_sangre = p.tipo_sangre_id)
+					WHERE p.id_paciente = $P{PACIENTE_ID}]]>
+	</queryString>
+	<field name="RUT_PACIENTE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="RUT_PACIENTE"/>
+		<property name="com.jaspersoft.studio.field.label" value="RUT_PACIENTE"/>
+	</field>
+	<field name="NOM_PACIENTE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOM_PACIENTE"/>
+		<property name="com.jaspersoft.studio.field.label" value="NOM_PACIENTE"/>
+	</field>
+	<field name="NRO_PACIENTE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NRO_PACIENTE"/>
+		<property name="com.jaspersoft.studio.field.label" value="NRO_PACIENTE"/>
+	</field>
+	<field name="NOM_GENERO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOM_GENERO"/>
+		<property name="com.jaspersoft.studio.field.label" value="NOM_GENERO"/>
+	</field>
+	<field name="NOM_TIPO_SANGRE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NOM_TIPO_SANGRE"/>
+		<property name="com.jaspersoft.studio.field.label" value="NOM_TIPO_SANGRE"/>
+	</field>
+	<field name="FECH_NACIMIENTO" class="java.util.Date">
+		<property name="com.jaspersoft.studio.field.name" value="FECH_NACIMIENTO"/>
+		<property name="com.jaspersoft.studio.field.label" value="FECH_NACIMIENTO"/>
+	</field>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{RUT_PACIENTE}]]></groupExpression>
+		<groupHeader>
+			<band height="94">
+				<staticText>
+					<reportElement mode="Opaque" x="-10" y="5" width="60" height="27" forecolor="#666666" backcolor="#FFFFFF" uuid="7773c102-7d9c-4ad3-9387-7140cb12330a"/>
+					<textElement>
+						<font size="16"/>
+					</textElement>
+					<text><![CDATA[R.U.T:]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="70" y="0" width="150" height="32" forecolor="#006699" backcolor="#FFFFFF" uuid="0b9b2838-1020-463a-9b2a-08c1aee19f25"/>
+					<textElement>
+						<font size="15" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{RUT_PACIENTE}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="Group2">
+		<groupExpression><![CDATA[$F{NOM_PACIENTE}]]></groupExpression>
+		<groupHeader>
+			<band height="70">
+				<staticText>
+					<reportElement x="-10" y="30" width="179" height="30" forecolor="#666666" uuid="8eedf589-1d15-49a4-864a-c50a675b747c"/>
+					<textElement>
+						<font size="16"/>
+					</textElement>
+					<text><![CDATA[Fecha de nacimiento:]]></text>
+				</staticText>
+				<textField pattern="yyyy-MM-dd">
+					<reportElement x="179" y="30" width="197" height="30" forecolor="#006699" uuid="884ccd46-9f92-4e4d-b0af-385fa32678d5"/>
+					<textElement>
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{FECH_NACIMIENTO}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="Group3">
+		<groupExpression><![CDATA[$F{NRO_PACIENTE}]]></groupExpression>
+		<groupHeader>
+			<band height="32">
+				<line>
+					<reportElement x="-10" y="0" width="595" height="1" forecolor="#666666" uuid="fb51a92b-4627-40ad-8a69-a7c6ad4c5b18"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="Group4">
+		<groupExpression><![CDATA[$F{NOM_GENERO}]]></groupExpression>
+		<groupHeader>
+			<band height="40"/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="NOM_TIPO_SANGRE">
+		<groupExpression><![CDATA[$F{NOM_TIPO_SANGRE}]]></groupExpression>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="196a8107-d179-4465-b0c9-b826b6fb2a5e"/>
+				<staticText>
+					<reportElement x="300" y="40" width="65" height="20" forecolor="#FFFFFF" uuid="ee878626-6d87-429c-89c8-80b70b66e0dc"/>
+					<textElement textAlignment="Right">
+						<font size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Nro del p:]]></text>
+				</staticText>
+				<image>
+					<reportElement x="0" y="20" width="100" height="96" uuid="68c9b983-4043-451f-abbd-70133f8e1ae1"/>
+					<imageExpression><![CDATA["static/img/grupobios_logo.jpeg"]]></imageExpression>
+				</image>
+				<textField>
+					<reportElement x="370" y="40" width="210" height="26" forecolor="#FFFFFF" uuid="36643d9c-da9c-44bc-a94e-44bb334fe60d"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NRO_PACIENTE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="100" y="20" width="129" height="42" forecolor="#FFFFFF" uuid="831edd7e-46f2-468f-aa90-de9fa1a3402d"/>
+					<textElement>
+						<font size="21" isBold="true"/>
+					</textElement>
+					<text><![CDATA[GrupoBios]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="65">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="61aed9fd-e14f-4372-96f2-103219eaa7f6"/>
+			</line>
+			<staticText>
+				<reportElement x="-10" y="33" width="80" height="32" forecolor="#666666" uuid="f1520408-deec-4662-9133-4bbb89a3edcd"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Paciente]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="70" y="33" width="180" height="32" forecolor="#006699" uuid="1461535d-5838-4f0d-903a-d8586736b1ab"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOM_PACIENTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="340" y="30" width="60" height="30" forecolor="#666666" uuid="00bc3c85-8f69-4f4a-a02b-540f3fedf387"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Genero:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="405" y="29" width="150" height="32" forecolor="#006699" uuid="4ac779cb-4190-49ca-91dc-ecb7283d3754"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOM_GENERO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="2f611083-220b-4390-b9e6-322a9f351f3a"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="20861c4b-ff51-482c-8e85-51b501ae9a87"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="d5680ad7-e73e-4192-9ae8-7ee17764d562"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="b45e2606-6ddf-426b-b9fc-90bdfa31f1a0"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
