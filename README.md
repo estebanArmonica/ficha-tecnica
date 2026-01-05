@@ -62,9 +62,6 @@ cuando se cree el `.env` se debe crear estas variables
     # ============ JAVA CONFIG ============
     JAVA_OPTS=-Xmx512m -Xms256m -XX:+UseG1GC -Duser.timezone=America/Santiago
 ```
-> [!NOTE]
-> los importantes es el que dice ORACLE DATABASE los demas se los pueden saltar no son tan necesarios
-
 Una vez listo solo queda ejecutar el proyecto, para esto puedes hacerlo de dos maneras, la primera es que existe un archivo llamada `run.sh` un ejecutable bash donde proyecto se levanta sin problemas o bien se puede ejecutar directamente desde el IDE que estes utilizando
 
 ```bash
